@@ -12,7 +12,7 @@ import ru.softmine.translator.databinding.SearchDialogFragmentBinding
 
 class SearchDialogFragment : BottomSheetDialogFragment() {
 
-    private val log_tag = "SearchDialogFragment"
+    private val logTag = "SearchDialogFragment"
 
     private lateinit var ui: SearchDialogFragmentBinding
     private var onSearchClickListener: OnSearchClickListener? = null
@@ -41,7 +41,7 @@ class SearchDialogFragment : BottomSheetDialogFragment() {
         }
 
     internal fun setOnSearchClickListener(listener: OnSearchClickListener) {
-        Log.d(log_tag, "setOnSearchClickListener")
+        Log.d(logTag, "setOnSearchClickListener")
         onSearchClickListener = listener
     }
 
