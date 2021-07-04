@@ -1,5 +1,6 @@
 package ru.softmine.translator.utils
 
+import android.util.Log
 import ru.softmine.translator.model.data.AppState
 import ru.softmine.translator.model.data.DataModel
 import ru.softmine.translator.model.data.Meanings
@@ -8,12 +9,19 @@ fun parseSearchResults(state: AppState): AppState {
     val newSearchResults = arrayListOf<DataModel>()
     when (state) {
         is AppState.Success -> {
+            Log.d("SearchResultParser - Success", state.data.toString())
             val searchResults = state.data
             if (!searchResults.isNullOrEmpty()) {
                 for (searchResult in searchResults) {
                     parseResult(searchResult, newSearchResults)
                 }
             }
+        }
+        is AppState.Error -> {
+            Log.d("SearchResultParser", state.error.message!!)
+        }
+        else -> {
+            Log.d("SearchResultParser", "Loading")
         }
     }
 

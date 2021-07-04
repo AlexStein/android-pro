@@ -1,26 +1,16 @@
 package ru.softmine.translator
 
-import android.app.Activity
 import android.app.Application
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import ru.softmine.translator.di.DaggerAppComponent
-import ru.softmine.translator.di.module.AppModule
-import javax.inject.Inject
+import org.koin.core.context.startKoin
+import ru.softmine.translator.di.application
+import ru.softmine.translator.di.mainScreen
 
-class App : Application(), HasActivityInjector {
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
-
-    override fun activityInjector(): DispatchingAndroidInjector<Activity>? {
-        return dispatchingAndroidInjector
-    }
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        DaggerAppComponent.builder()
-            .appModule(AppModule(this))
-            .build()
-            .inject(this)
+        startKoin {
+            modules(listOf(application, mainScreen))
+        }
     }
 }
