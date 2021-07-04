@@ -1,13 +1,12 @@
 package ru.softmine.translator.model.datasource.interfaces
 
-import ru.softmine.translator.model.data.DataModel
-import io.reactivex.rxjava3.core.Observable
-
+import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Query
+import ru.softmine.translator.model.data.DataModel
 
 interface ApiService {
 
     @GET("words/search")
-    fun search(@Query("search") wordToSearch: String): Observable<List<DataModel>>
+    fun searchAsync(@Query("search") wordToSearch: String): Deferred<List<DataModel>>
 }
