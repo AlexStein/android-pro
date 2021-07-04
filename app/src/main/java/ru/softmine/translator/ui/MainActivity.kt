@@ -5,13 +5,13 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.android.viewmodel.ext.android.viewModel
 import ru.softmine.translator.R
 import ru.softmine.translator.databinding.ActivityMainBinding
 import ru.softmine.translator.model.data.AppState
 import ru.softmine.translator.model.data.DataModel
+import ru.softmine.translator.utils.convertMeaningsToString
 import ru.softmine.translator.utils.network.isOnline
 import ru.softmine.translator.view.BaseActivity
 import ru.softmine.translator.view.MainInteractor
@@ -35,7 +35,14 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
-                Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
+                startActivity(
+                    DescriptionActivity.getIntent(
+                        this@MainActivity,
+                        data.text!!,
+                        convertMeaningsToString(data.meanings!!),
+                        data.meanings[0].imageUrl
+                    )
+                )
             }
         }
     private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
