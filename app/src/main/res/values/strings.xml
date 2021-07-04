@@ -12,6 +12,8 @@
     <string name="dialog_title_stub">Undefined error</string>
     <string name="dialog_title_device_is_offline">No internet connection</string>
     <string name="dialog_message_device_is_offline">"You can not use app without internet connection. Please, check         internet connection.     "</string>
-    <string name="dialog_tittle_sorry">Sorry</string>
+    <string name="dialog_title_sorry">Sorry</string>
     <string name="error_stub">Error</string>
+    <string name="menu_title_history">History</string>
+    <string name="empty_history_response_on_success">History is empty</string>
 </resources>
