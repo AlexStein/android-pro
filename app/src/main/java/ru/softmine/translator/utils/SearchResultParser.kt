@@ -4,36 +4,68 @@ import android.util.Log
 import ru.softmine.translator.model.data.AppState
 import ru.softmine.translator.model.data.DataModel
 import ru.softmine.translator.model.data.Meanings
+import ru.softmine.translator.model.data.room.HistoryEntity
+import java.time.Clock
 
-fun parseSearchResults(state: AppState): AppState {
+fun parseOnlineSearchResults(state: AppState): AppState {
+    return AppState.Success(mapResult(state, true))
+}
+
+fun parseLocalSearchResults(data: AppState): AppState {
+    return AppState.Success(mapResult(data, false))
+}
+
+private fun mapResult(
+    data: AppState,
+    isOnline: Boolean
+): List<DataModel> {
     val newSearchResults = arrayListOf<DataModel>()
-    when (state) {
+    when (data) {
         is AppState.Success -> {
-            Log.d("SearchResultParser - Success", state.data.toString())
-            val searchResults = state.data
-            if (!searchResults.isNullOrEmpty()) {
-                for (searchResult in searchResults) {
-                    parseResult(searchResult, newSearchResults)
-                }
-            }
+            getSuccessResultData(data, isOnline, newSearchResults)
         }
         is AppState.Error -> {
-            Log.d("SearchResultParser", state.error.message!!)
+            Log.d("SearchResultParser", data.error.message!!)
         }
         else -> {
             Log.d("SearchResultParser", "Loading")
         }
     }
-
-    return AppState.Success(newSearchResults)
+    return newSearchResults
 }
 
-private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel>) {
+private fun getSuccessResultData(
+    data: AppState.Success,
+    isOnline: Boolean,
+    newDataModels: ArrayList<DataModel>
+) {
+    val dataModels: List<DataModel> = data.data as List<DataModel>
+    if (dataModels.isNotEmpty()) {
+        if (isOnline) {
+            for (searchResult in dataModels) {
+                parseOnlineResult(searchResult, newDataModels)
+            }
+        } else {
+            for (searchResult in dataModels) {
+                newDataModels.add(DataModel(searchResult.text, arrayListOf()))
+            }
+        }
+    }
+}
+
+private fun parseOnlineResult(dataModel: DataModel, newDataModels: ArrayList<DataModel>) {
     if (!dataModel.text.isNullOrBlank() && !dataModel.meanings.isNullOrEmpty()) {
         val newMeanings = arrayListOf<Meanings>()
         for (meaning in dataModel.meanings) {
             if (meaning.translation != null && !meaning.translation.translation.isNullOrBlank()) {
-                newMeanings.add(Meanings(meaning.translation, meaning.imageUrl))
+                newMeanings.add(
+                    Meanings(
+                        meaning.translation,
+                        meaning.imageUrl,
+                        meaning.transcription,
+                        meaning.alternativeTranslations
+                    )
+                )
             }
         }
         if (newMeanings.isNotEmpty()) {
@@ -41,6 +73,34 @@ private fun parseResult(dataModel: DataModel, newDataModels: ArrayList<DataModel
         }
     }
 }
+
+fun mapHistoryEntityToSearchResult(list: List<HistoryEntity>): List<DataModel> {
+    val searchResult = ArrayList<DataModel>()
+    if (!list.isNullOrEmpty()) {
+        for (entity in list) {
+            searchResult.add(DataModel(entity.word, null))
+        }
+    }
+    return searchResult
+}
+
+fun convertDataModelSuccessToEntity(appState: AppState): HistoryEntity? {
+    return when (appState) {
+        is AppState.Success -> {
+            val searchResult = appState.data
+            if (searchResult.isNullOrEmpty() || searchResult[0].text.isNullOrEmpty()) {
+                null
+            } else {
+                HistoryEntity(searchResult[0].text!!,
+                    description = null,
+                    created = Clock.systemUTC().instant().toString(),
+                    count = 1)
+            }
+        }
+        else -> null
+    }
+}
+
 
 fun convertMeaningsToString(meanings: List<Meanings>): String {
     var meaningsSeparatedByComma = String()
@@ -52,4 +112,18 @@ fun convertMeaningsToString(meanings: List<Meanings>): String {
         }
     }
     return meaningsSeparatedByComma
+}
+
+fun convertAltTranslations(meaning: Meanings?): String {
+    var result = ""
+    meaning?.alternativeTranslations?.let {
+        for (t18n in it) {
+            result += if(result.isEmpty()) {
+                t18n.translation
+            } else {
+                String.format("%s%s", t18n.translation, ", ")
+            }
+        }
+    }
+    return result
 }

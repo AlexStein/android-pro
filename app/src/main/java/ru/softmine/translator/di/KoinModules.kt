@@ -1,29 +1,42 @@
 package ru.softmine.translator.di
 
-import org.koin.core.qualifier.named
+import androidx.room.Room
 import org.koin.dsl.module
 import ru.softmine.translator.model.data.DataModel
+import ru.softmine.translator.model.data.room.db.Database
 import ru.softmine.translator.model.datasource.RetrofitImplementation
 import ru.softmine.translator.model.datasource.RoomDataBaseImplementation
 import ru.softmine.translator.model.repository.Repository
 import ru.softmine.translator.model.repository.RepositoryImplementation
-import ru.softmine.translator.view.MainInteractor
-import ru.softmine.translator.view.MainViewModel
-
-const val NAME_REMOTE = "Remote"
-const val NAME_LOCAL = "Local"
+import ru.softmine.translator.model.repository.RepositoryImplementationLocal
+import ru.softmine.translator.model.repository.RepositoryLocal
+import ru.softmine.translator.view.*
 
 
 val application = module {
-    single<Repository<List<DataModel>>>(named(NAME_REMOTE)) { RepositoryImplementation(
-        RetrofitImplementation()
-    ) }
-    single<Repository<List<DataModel>>>(named(NAME_LOCAL)) { RepositoryImplementation(
-        RoomDataBaseImplementation()
-    ) }
+    single { Room.databaseBuilder(get(), Database::class.java, "Database")
+        .fallbackToDestructiveMigration()
+        .build()
+    }
+    single { get<Database>().historyDao() }
+    single { get<Database>().favoriteDao() }
+    single<Repository<List<DataModel>>> { RepositoryImplementation(RetrofitImplementation()) }
+    single<RepositoryLocal<List<DataModel>>> {
+        RepositoryImplementationLocal(RoomDataBaseImplementation(get(), get()))
+    }
 }
 
 val mainScreen = module {
-    factory { MainInteractor(get(named(NAME_REMOTE)), get(named(NAME_LOCAL))) }
     factory { MainViewModel(get()) }
+    factory { MainInteractor(get(), get()) }
+}
+
+val historyScreen = module {
+    factory { HistoryViewModel(get()) }
+    factory { HistoryInteractor(get(), get()) }
+}
+
+val descriptionScreen = module {
+    factory { DescriptionViewModel(get()) }
+    factory { DescriptionInteractor(get()) }
 }

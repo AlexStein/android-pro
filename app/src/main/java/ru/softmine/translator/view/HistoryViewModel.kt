@@ -1,11 +1,11 @@
 package ru.softmine.translator.view
 
 import androidx.lifecycle.LiveData
-import kotlinx.coroutines.launch
 import ru.softmine.translator.model.data.AppState
-import ru.softmine.translator.utils.parseOnlineSearchResults
+import ru.softmine.translator.utils.parseLocalSearchResults
+import kotlinx.coroutines.launch
 
-class MainViewModel(private val interactor: MainInteractor) :
+class HistoryViewModel(private val interactor: HistoryInteractor) :
     BaseViewModel<AppState>() {
 
     private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
@@ -20,8 +20,9 @@ class MainViewModel(private val interactor: MainInteractor) :
         viewModelCoroutineScope.launch { startInteractor(word, isOnline) }
     }
 
-    private suspend fun startInteractor(word: String, isOnline: Boolean) =
-        _mutableLiveData.postValue(parseOnlineSearchResults(interactor.getData(word, isOnline)))
+    private suspend fun startInteractor(word: String, isOnline: Boolean) {
+        _mutableLiveData.postValue(parseLocalSearchResults(interactor.getData(word, isOnline)))
+    }
 
     override fun handleError(error: Throwable) {
         _mutableLiveData.postValue(AppState.Error(error))

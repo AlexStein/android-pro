@@ -1,17 +1,19 @@
 package ru.softmine.translator.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.android.viewmodel.ext.android.viewModel
 import ru.softmine.translator.R
 import ru.softmine.translator.databinding.ActivityMainBinding
 import ru.softmine.translator.model.data.AppState
 import ru.softmine.translator.model.data.DataModel
+import ru.softmine.translator.utils.convertAltTranslations
+import ru.softmine.translator.utils.convertMeaningsToString
 import ru.softmine.translator.utils.network.isOnline
 import ru.softmine.translator.view.BaseActivity
 import ru.softmine.translator.view.MainInteractor
@@ -35,7 +37,17 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
-                Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
+                Log.d("MainActivity", data.toString())
+                startActivity(
+                    DescriptionActivity.getIntent(
+                        this@MainActivity,
+                        data.text!!,
+                        convertMeaningsToString(data.meanings!!),
+                        data.meanings[0].imageUrl,
+                        data.meanings[0].transcription,
+                        convertAltTranslations(data.meanings[0]),
+                    )
+                )
             }
         }
     private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
@@ -76,42 +88,26 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         initView()
     }
 
-    override fun renderData(appState: AppState) {
-        when (appState) {
-            is AppState.Success -> {
-                showViewWorking()
-                val data = appState.data
-                if (data.isNullOrEmpty()) {
-                    showAlertDialog(
-                        getString(R.string.dialog_tittle_sorry),
-                        getString(R.string.empty_server_response_on_success)
-                    )
-                } else {
-                    adapter.setData(data)
-                }
+    override fun setDataToAdapter(data: List<DataModel>) {
+        adapter.setData(data)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.history_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_history -> {
+                startActivity(Intent(this, HistoryActivity::class.java))
+                true
             }
-            is AppState.Loading -> {
-                showViewLoading()
-                if (appState.progress != null) {
-                    ui.progressBarHorizontal.visibility = VISIBLE
-                    ui.progressBarRound.visibility = GONE
-                    ui.progressBarHorizontal.progress = appState.progress
-                } else {
-                    ui.progressBarHorizontal.visibility = GONE
-                    ui.progressBarRound.visibility = VISIBLE
-                }
-            }
-            is AppState.Error -> {
-                showAlertDialog(getString(R.string.error_stub), appState.error.message)
-            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun showViewWorking() {
-        ui.loadingFrameLayout.visibility = GONE
-    }
-
-    private fun showViewLoading() {
-        ui.loadingFrameLayout.visibility = VISIBLE
+    override fun getEmptyDataMessage(): String {
+        return getString(R.string.empty_server_response_on_success)
     }
 }

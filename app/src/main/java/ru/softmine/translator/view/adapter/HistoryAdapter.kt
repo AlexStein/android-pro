@@ -5,12 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.softmine.translator.R
-import ru.softmine.translator.databinding.MainRecyclerviewItemBinding
+import ru.softmine.translator.databinding.HistoryRecyclerviewItemBinding
 import ru.softmine.translator.model.data.DataModel
-import ru.softmine.translator.utils.convertMeaningsToString
 
-class MainAdapter(private var onListItemClickListener: OnListItemClickListener) :
-    RecyclerView.Adapter<MainAdapter.RecyclerItemViewHolder>() {
+class HistoryAdapter(private var onListItemClickListener: OnListItemClickListener) : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolder>() {
 
     private var data: List<DataModel> = arrayListOf()
 
@@ -21,7 +19,7 @@ class MainAdapter(private var onListItemClickListener: OnListItemClickListener) 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.main_recyclerview_item, parent, false)
+        val view = inflater.inflate(R.layout.history_recyclerview_item, parent, false)
 
         return RecyclerItemViewHolder(view)
     }
@@ -35,18 +33,16 @@ class MainAdapter(private var onListItemClickListener: OnListItemClickListener) 
     }
 
     inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-        private val ui: MainRecyclerviewItemBinding by lazy {
-            MainRecyclerviewItemBinding.bind(
-                itemView
-            )
+        private val ui: HistoryRecyclerviewItemBinding by lazy {
+            HistoryRecyclerviewItemBinding.bind(itemView)
         }
 
         fun bind(data: DataModel) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
-                ui.headerTextviewRecyclerItem.text = data.text
-                ui.descriptionTextviewRecyclerItem.text = convertMeaningsToString(data.meanings!!)
-                itemView.setOnClickListener { openInNewWindow(data) }
+                ui.headerHistoryTextviewRecyclerItem.text = data.text
+                ui.root.setOnClickListener {
+                    itemView.setOnClickListener { openInNewWindow(data) }
+                }
             }
         }
     }
