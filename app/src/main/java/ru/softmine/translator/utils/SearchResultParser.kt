@@ -5,6 +5,7 @@ import ru.softmine.translator.model.data.AppState
 import ru.softmine.translator.model.data.DataModel
 import ru.softmine.translator.model.data.Meanings
 import ru.softmine.translator.model.data.room.HistoryEntity
+import java.time.Clock
 
 fun parseOnlineSearchResults(state: AppState): AppState {
     return AppState.Success(mapResult(state, true))
@@ -57,7 +58,14 @@ private fun parseOnlineResult(dataModel: DataModel, newDataModels: ArrayList<Dat
         val newMeanings = arrayListOf<Meanings>()
         for (meaning in dataModel.meanings) {
             if (meaning.translation != null && !meaning.translation.translation.isNullOrBlank()) {
-                newMeanings.add(Meanings(meaning.translation, meaning.imageUrl))
+                newMeanings.add(
+                    Meanings(
+                        meaning.translation,
+                        meaning.imageUrl,
+                        meaning.transcription,
+                        meaning.alternativeTranslations
+                    )
+                )
             }
         }
         if (newMeanings.isNotEmpty()) {
@@ -83,7 +91,10 @@ fun convertDataModelSuccessToEntity(appState: AppState): HistoryEntity? {
             if (searchResult.isNullOrEmpty() || searchResult[0].text.isNullOrEmpty()) {
                 null
             } else {
-                HistoryEntity(searchResult[0].text!!, null)
+                HistoryEntity(searchResult[0].text!!,
+                    description = null,
+                    created = Clock.systemUTC().instant().toString(),
+                    count = 1)
             }
         }
         else -> null
@@ -101,4 +112,18 @@ fun convertMeaningsToString(meanings: List<Meanings>): String {
         }
     }
     return meaningsSeparatedByComma
+}
+
+fun convertAltTranslations(meaning: Meanings?): String {
+    var result = ""
+    meaning?.alternativeTranslations?.let {
+        for (t18n in it) {
+            result += if(result.isEmpty()) {
+                t18n.translation
+            } else {
+                String.format("%s%s", t18n.translation, ", ")
+            }
+        }
+    }
+    return result
 }

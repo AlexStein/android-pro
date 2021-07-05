@@ -10,18 +10,19 @@ import ru.softmine.translator.model.repository.Repository
 import ru.softmine.translator.model.repository.RepositoryImplementation
 import ru.softmine.translator.model.repository.RepositoryImplementationLocal
 import ru.softmine.translator.model.repository.RepositoryLocal
-import ru.softmine.translator.view.HistoryInteractor
-import ru.softmine.translator.view.HistoryViewModel
-import ru.softmine.translator.view.MainInteractor
-import ru.softmine.translator.view.MainViewModel
+import ru.softmine.translator.view.*
 
 
 val application = module {
-    single { Room.databaseBuilder(get(), Database::class.java, "Database").build() }
+    single { Room.databaseBuilder(get(), Database::class.java, "Database")
+        .fallbackToDestructiveMigration()
+        .build()
+    }
     single { get<Database>().historyDao() }
+    single { get<Database>().favoriteDao() }
     single<Repository<List<DataModel>>> { RepositoryImplementation(RetrofitImplementation()) }
     single<RepositoryLocal<List<DataModel>>> {
-        RepositoryImplementationLocal(RoomDataBaseImplementation(get()))
+        RepositoryImplementationLocal(RoomDataBaseImplementation(get(), get()))
     }
 }
 
@@ -33,4 +34,9 @@ val mainScreen = module {
 val historyScreen = module {
     factory { HistoryViewModel(get()) }
     factory { HistoryInteractor(get(), get()) }
+}
+
+val descriptionScreen = module {
+    factory { DescriptionViewModel(get()) }
+    factory { DescriptionInteractor(get()) }
 }

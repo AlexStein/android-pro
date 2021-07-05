@@ -14,4 +14,12 @@ class RepositoryImplementationLocal(private val dataSource: DataSourceLocal<List
     override suspend fun saveToDB(appState: AppState) {
         dataSource.saveToDB(appState)
     }
+
+    override suspend fun saveFavorite(word: String, insert: Boolean) {
+        dataSource.saveFavorite(word, insert)
+    }
+
+    override suspend fun isFavorite(word: String): Boolean {
+        return dataSource.isFavorite(word)
+    }
 }

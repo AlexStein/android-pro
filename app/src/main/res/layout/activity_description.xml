@@ -18,21 +18,52 @@
             android:layout_marginTop="@dimen/margin_medium"
             android:fitsSystemWindows="true">
 
-        <TextView
-                android:id="@+id/description_header"
-                android:layout_width="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_height="wrap_content"
-                style="@style/HeaderTextStyle"
-                tools:text="Header"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:fitsSystemWindows="true">
 
+            <TextView
+                    android:id="@+id/description_header"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    style="@style/HeaderTextStyle"
+                    tools:text="Header"/>
+
+            <CheckBox
+                android:id="@+id/checkFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="" />
+        </LinearLayout>
         <TextView
                 android:id="@+id/description_textview"
                 android:layout_width="wrap_content"
                 style="@style/BaseTextStyle"
                 android:layout_marginStart="@dimen/margin_medium"
                 android:layout_height="wrap_content"
-                tools:text="Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
+                tools:text="Description"/>
+
+        <TextView
+            android:id="@+id/transcription_textview"
+            android:layout_width="wrap_content"
+            style="@style/BaseTextStyle"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_height="wrap_content"
+            tools:text="Transcription"/>
+
+        <TextView
+            android:id="@+id/alternative_translation_textview"
+            android:layout_width="wrap_content"
+            style="@style/BaseTextStyle"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_height="wrap_content"
+            tools:text="Alternative translation"/>
 
         <ru.softmine.translator.utils.ui.EquilateralImageView
                 android:id="@+id/description_imageview"
@@ -46,5 +77,6 @@
                 android:visibility="visible"
                 tools:visibility="visible"
                 android:contentDescription="@string/image_stub"/>
+
     </LinearLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

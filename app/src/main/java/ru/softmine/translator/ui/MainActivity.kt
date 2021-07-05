@@ -2,6 +2,7 @@ package ru.softmine.translator.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -11,6 +12,7 @@ import ru.softmine.translator.R
 import ru.softmine.translator.databinding.ActivityMainBinding
 import ru.softmine.translator.model.data.AppState
 import ru.softmine.translator.model.data.DataModel
+import ru.softmine.translator.utils.convertAltTranslations
 import ru.softmine.translator.utils.convertMeaningsToString
 import ru.softmine.translator.utils.network.isOnline
 import ru.softmine.translator.view.BaseActivity
@@ -35,12 +37,15 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
+                Log.d("MainActivity", data.toString())
                 startActivity(
                     DescriptionActivity.getIntent(
                         this@MainActivity,
                         data.text!!,
                         convertMeaningsToString(data.meanings!!),
-                        data.meanings[0].imageUrl
+                        data.meanings[0].imageUrl,
+                        data.meanings[0].transcription,
+                        convertAltTranslations(data.meanings[0]),
                     )
                 )
             }

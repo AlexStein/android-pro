@@ -3,7 +3,6 @@ package ru.softmine.translator.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +40,6 @@ class SearchDialogFragment : BottomSheetDialogFragment() {
         }
 
     internal fun setOnSearchClickListener(listener: OnSearchClickListener) {
-        Log.d(logTag, "setOnSearchClickListener")
         onSearchClickListener = listener
     }
 

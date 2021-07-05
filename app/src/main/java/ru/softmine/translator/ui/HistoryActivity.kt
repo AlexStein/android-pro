@@ -6,6 +6,8 @@ import ru.softmine.translator.R
 import ru.softmine.translator.databinding.ActivityHistoryBinding
 import ru.softmine.translator.model.data.AppState
 import ru.softmine.translator.model.data.DataModel
+import ru.softmine.translator.utils.convertAltTranslations
+import ru.softmine.translator.utils.convertMeaningsToString
 import ru.softmine.translator.view.BaseActivity
 import ru.softmine.translator.view.HistoryInteractor
 import ru.softmine.translator.view.HistoryViewModel
@@ -18,7 +20,23 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
     }
 
     override lateinit var model: HistoryViewModel
-    private val adapter: HistoryAdapter by lazy { HistoryAdapter() }
+    private val adapter: HistoryAdapter by lazy { HistoryAdapter(onListItemClickListener) }
+    private val onListItemClickListener: HistoryAdapter.OnListItemClickListener =
+        object : HistoryAdapter.OnListItemClickListener {
+            override fun onItemClick(data: DataModel) {
+
+                startActivity(
+                    DescriptionActivity.getIntent(
+                        this@HistoryActivity,
+                        data.text!!,
+                        convertMeaningsToString(data.meanings!!),
+                        null,
+                        null,
+                        null,
+                    )
+                )
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

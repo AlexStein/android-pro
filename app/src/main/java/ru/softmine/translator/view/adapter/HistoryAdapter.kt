@@ -3,13 +3,12 @@ package ru.softmine.translator.view.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ru.softmine.translator.R
 import ru.softmine.translator.databinding.HistoryRecyclerviewItemBinding
 import ru.softmine.translator.model.data.DataModel
 
-class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolder>() {
+class HistoryAdapter(private var onListItemClickListener: OnListItemClickListener) : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolder>() {
 
     private var data: List<DataModel> = arrayListOf()
 
@@ -35,19 +34,24 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolde
 
     inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val ui: HistoryRecyclerviewItemBinding by lazy {
-            HistoryRecyclerviewItemBinding.bind(
-                itemView
-            )
+            HistoryRecyclerviewItemBinding.bind(itemView)
         }
 
         fun bind(data: DataModel) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
                 ui.headerHistoryTextviewRecyclerItem.text = data.text
                 ui.root.setOnClickListener {
-                    Toast.makeText(itemView.context, "on click: ${data.text}", Toast.LENGTH_SHORT)
-                        .show()
+                    itemView.setOnClickListener { openInNewWindow(data) }
                 }
             }
         }
+    }
+
+    private fun openInNewWindow(listItemData: DataModel) {
+        onListItemClickListener.onItemClick(listItemData)
+    }
+
+    interface OnListItemClickListener {
+        fun onItemClick(data: DataModel)
     }
 }
