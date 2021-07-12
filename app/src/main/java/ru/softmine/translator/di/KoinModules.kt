@@ -2,14 +2,14 @@ package ru.softmine.translator.di
 
 import androidx.room.Room
 import org.koin.dsl.module
-import ru.softmine.translator.model.data.DataModel
-import ru.softmine.translator.model.data.room.db.Database
-import ru.softmine.translator.model.datasource.RetrofitImplementation
-import ru.softmine.translator.model.datasource.RoomDataBaseImplementation
-import ru.softmine.translator.model.repository.Repository
-import ru.softmine.translator.model.repository.RepositoryImplementation
-import ru.softmine.translator.model.repository.RepositoryImplementationLocal
-import ru.softmine.translator.model.repository.RepositoryLocal
+import ru.softmine.model.data.DataModel
+import ru.softmine.repository.room.db.Database
+import ru.softmine.repository.RetrofitImplementation
+import ru.softmine.repository.RoomDataBaseImplementation
+import ru.softmine.repository.interfaces.Repository
+import ru.softmine.repository.RepositoryImplementation
+import ru.softmine.repository.RepositoryImplementationLocal
+import ru.softmine.repository.interfaces.RepositoryLocal
 import ru.softmine.translator.view.*
 
 
@@ -32,11 +32,11 @@ val mainScreen = module {
 }
 
 val historyScreen = module {
-    factory { HistoryViewModel(get()) }
-    factory { HistoryInteractor(get(), get()) }
+    factory { ru.softmine.historyscreen.view.HistoryViewModel(get()) }
+    factory { ru.softmine.historyscreen.view.HistoryInteractor(get(), get()) }
 }
 
 val descriptionScreen = module {
-    factory { DescriptionViewModel(get()) }
-    factory { DescriptionInteractor(get()) }
+    factory { ru.softmine.descriptionscreen.DescriptionViewModel(get()) }
+    factory { ru.softmine.descriptionscreen.DescriptionInteractor(get()) }
 }

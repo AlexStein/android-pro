@@ -1,10 +1,10 @@
 package ru.softmine.translator.utils
 
 import android.util.Log
-import ru.softmine.translator.model.data.AppState
-import ru.softmine.translator.model.data.DataModel
-import ru.softmine.translator.model.data.Meanings
-import ru.softmine.translator.model.data.room.HistoryEntity
+import ru.softmine.model.data.AppState
+import ru.softmine.model.data.DataModel
+import ru.softmine.model.data.Meanings
+import ru.softmine.repository.room.HistoryEntity
 import java.time.Clock
 
 fun parseOnlineSearchResults(state: AppState): AppState {
@@ -56,8 +56,8 @@ private fun getSuccessResultData(
 private fun parseOnlineResult(dataModel: DataModel, newDataModels: ArrayList<DataModel>) {
     if (!dataModel.text.isNullOrBlank() && !dataModel.meanings.isNullOrEmpty()) {
         val newMeanings = arrayListOf<Meanings>()
-        for (meaning in dataModel.meanings) {
-            if (meaning.translation != null && !meaning.translation.translation.isNullOrBlank()) {
+        for (meaning in dataModel.meanings!!) {
+            if (meaning.translation != null && !meaning.translation!!.translation.isNullOrBlank()) {
                 newMeanings.add(
                     Meanings(
                         meaning.translation,

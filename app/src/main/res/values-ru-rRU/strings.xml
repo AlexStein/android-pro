@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Переводчик</string>
-    <string name="error_textview_stub">Ошибка</string>
-    <string name="reload_button">Перезагрузить</string>
-    <string name="undefined_error">Неизвестная ошибка</string>
     <string name="empty_server_response_on_success">Ответ сервера пустой</string>
     <string name="button_search">Поиск</string>
     <string name="search_hint">Новое слово</string>
     <string name="delete_description">Очистить</string>
-    <string name="image_stub">Картинка</string>
-    <string name="dialog_button_cancel">Отмена</string>
-    <string name="dialog_title_stub">Неизвестная ошибка</string>
-    <string name="dialog_title_device_is_offline">Нет соединения с Интернет</string>
-    <string name="dialog_title_sorry">Извините</string>
-    <string name="dialog_message_device_is_offline">Приложение не может работать без соединения с Интернет. Проверьте соединение.</string>
-    <string name="error_stub">Ошибка</string>
     <string name="menu_title_history">История</string>
-    <string name="empty_history_response_on_success">Нет записей истории</string>
 </resources>

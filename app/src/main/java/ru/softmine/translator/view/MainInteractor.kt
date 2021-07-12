@@ -1,10 +1,10 @@
 package ru.softmine.translator.view
 
-import ru.softmine.translator.model.data.AppState
-import ru.softmine.translator.model.data.DataModel
-import ru.softmine.translator.model.repository.Repository
-import ru.softmine.translator.model.repository.RepositoryLocal
-import ru.softmine.translator.view.interfaces.Interactor
+import ru.softmine.model.data.AppState
+import ru.softmine.model.data.DataModel
+import ru.softmine.repository.interfaces.Repository
+import ru.softmine.repository.interfaces.RepositoryLocal
+import ru.softmine.core.interfaces.Interactor
 
 class MainInteractor(
     private val repositoryRemote: Repository<List<DataModel>>,

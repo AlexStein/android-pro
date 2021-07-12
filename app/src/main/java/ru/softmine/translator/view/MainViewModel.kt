@@ -2,11 +2,11 @@ package ru.softmine.translator.view
 
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.launch
-import ru.softmine.translator.model.data.AppState
+import ru.softmine.model.data.AppState
 import ru.softmine.translator.utils.parseOnlineSearchResults
 
 class MainViewModel(private val interactor: MainInteractor) :
-    BaseViewModel<AppState>() {
+    ru.softmine.core.BaseViewModel<AppState>() {
 
     private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
 

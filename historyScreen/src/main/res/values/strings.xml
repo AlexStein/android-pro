@@ -1,0 +1,3 @@
+<resources>
+    <string name="empty_history_response_on_success">History is empty</string>
+</resources>
