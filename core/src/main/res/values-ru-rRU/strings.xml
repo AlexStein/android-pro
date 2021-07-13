@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_title_device_is_offline">Нет соединения с Интернет</string>
+    <string name="dialog_title_sorry">Извините</string>
+    <string name="dialog_message_device_is_offline">Приложение не может работать без соединения с Интернет. Проверьте соединение.</string>
+    <string name="error_stub">Ошибка</string>
+</resources>

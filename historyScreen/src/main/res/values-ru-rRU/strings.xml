@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty_history_response_on_success">Нет записей истории</string>
+</resources>

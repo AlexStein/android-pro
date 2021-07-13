@@ -8,19 +8,19 @@ import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.android.viewmodel.ext.android.viewModel
+import ru.softmine.descriptionscreen.DescriptionActivity
 import ru.softmine.translator.R
 import ru.softmine.translator.databinding.ActivityMainBinding
-import ru.softmine.translator.model.data.AppState
-import ru.softmine.translator.model.data.DataModel
+import ru.softmine.model.data.AppState
+import ru.softmine.model.data.DataModel
 import ru.softmine.translator.utils.convertAltTranslations
 import ru.softmine.translator.utils.convertMeaningsToString
-import ru.softmine.translator.utils.network.isOnline
-import ru.softmine.translator.view.BaseActivity
+import ru.softmine.utils.network.isOnline
 import ru.softmine.translator.view.MainInteractor
 import ru.softmine.translator.view.MainViewModel
 import ru.softmine.translator.view.adapter.MainAdapter
 
-class MainActivity : BaseActivity<AppState, MainInteractor>() {
+class MainActivity : ru.softmine.core.BaseActivity<AppState, MainInteractor>() {
 
     private val ui: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -43,9 +43,9 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                         this@MainActivity,
                         data.text!!,
                         convertMeaningsToString(data.meanings!!),
-                        data.meanings[0].imageUrl,
-                        data.meanings[0].transcription,
-                        convertAltTranslations(data.meanings[0]),
+                        data.meanings!![0].imageUrl,
+                        data.meanings!![0].transcription,
+                        convertAltTranslations(data.meanings!![0]),
                     )
                 )
             }
@@ -100,7 +100,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_history -> {
-                startActivity(Intent(this, HistoryActivity::class.java))
+                startActivity(Intent(this, ru.softmine.historyscreen.view.HistoryActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)

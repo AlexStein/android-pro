@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.softmine.translator.R
 import ru.softmine.translator.databinding.MainRecyclerviewItemBinding
-import ru.softmine.translator.model.data.DataModel
+import ru.softmine.model.data.DataModel
 import ru.softmine.translator.utils.convertMeaningsToString
 
 class MainAdapter(private var onListItemClickListener: OnListItemClickListener) :
