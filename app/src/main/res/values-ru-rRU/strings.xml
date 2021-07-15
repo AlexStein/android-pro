@@ -6,4 +6,5 @@
     <string name="search_hint">Новое слово</string>
     <string name="delete_description">Очистить</string>
     <string name="menu_title_history">История</string>
+    <string name="title_historyfeature">Просмотр истории</string>
 </resources>
