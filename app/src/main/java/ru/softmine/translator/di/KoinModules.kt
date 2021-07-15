@@ -1,6 +1,7 @@
 package ru.softmine.translator.di
 
 import androidx.room.Room
+import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import ru.softmine.model.data.DataModel
 import ru.softmine.repository.room.db.Database
@@ -12,6 +13,12 @@ import ru.softmine.repository.RepositoryImplementationLocal
 import ru.softmine.repository.interfaces.RepositoryLocal
 import ru.softmine.translator.view.*
 
+
+fun injectDependencies() = loadModules
+
+private val loadModules by lazy {
+    loadKoinModules(listOf(application, mainScreen, descriptionScreen))
+}
 
 val application = module {
     single { Room.databaseBuilder(get(), Database::class.java, "Database")
@@ -29,11 +36,6 @@ val application = module {
 val mainScreen = module {
     factory { MainViewModel(get()) }
     factory { MainInteractor(get(), get()) }
-}
-
-val historyScreen = module {
-    factory { ru.softmine.historyscreen.view.HistoryViewModel(get()) }
-    factory { ru.softmine.historyscreen.view.HistoryInteractor(get(), get()) }
 }
 
 val descriptionScreen = module {

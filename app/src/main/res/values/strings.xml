@@ -5,4 +5,5 @@
     <string name="search_hint">New word</string>
     <string name="delete_description">Clear</string>
     <string name="menu_title_history">History</string>
+    <string name="title_historyfeature">History View</string>
 </resources>
